@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.robertas.ugithub.R
 import com.robertas.ugithub.databinding.UserItemBinding
 import com.robertas.ugithub.interfaces.IOnItemClickListener
 import com.robertas.ugithub.models.domain.User

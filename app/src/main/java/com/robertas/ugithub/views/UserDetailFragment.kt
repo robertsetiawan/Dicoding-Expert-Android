@@ -84,20 +84,13 @@ class UserDetailFragment : Fragment() {
             setupWithNavController(navController)
 
             setNavigationOnClickListener {
-
-                with(userViewModel) {
-                    doneLoadingFollowingList()
-
-                    doneLoadingFollowerList()
-                }
-
                 navController.navigateUp()
             }
         }
     }
 
     private fun setupViewPager() {
-        val userTabAdapter = UserTabAdapter(this@UserDetailFragment)
+        val userTabAdapter = UserTabAdapter(this@UserDetailFragment, navArgs.user.login)
 
         binding.apply {
             pager.adapter = userTabAdapter
@@ -108,17 +101,6 @@ class UserDetailFragment : Fragment() {
                     else -> tab.text = getString(R.string.following)
                 }
             }.attach()
-
-            pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-
-                    when (position) {
-                        0 -> userViewModel.getFollowerList(navArgs.user.login)
-                        else -> userViewModel.getFollowingList(navArgs.user.login)
-                    }
-                }
-            })
         }
     }
 }

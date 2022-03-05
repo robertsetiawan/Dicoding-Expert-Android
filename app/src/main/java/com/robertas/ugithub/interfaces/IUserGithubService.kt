@@ -2,7 +2,6 @@ package com.robertas.ugithub.interfaces
 
 import com.robertas.ugithub.models.network.SearchResponse
 import com.robertas.ugithub.models.network.UserNetwork
-import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

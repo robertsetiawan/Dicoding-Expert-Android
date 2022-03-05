@@ -13,7 +13,7 @@ import com.robertas.ugithub.services.Network
 import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel() {
-    private var userRepository: IRepository<User> = UserRepository(Network.apiService, UserMapper())
+    private val userRepository: IRepository<User> = UserRepository(Network.apiService, UserMapper())
 
     private val _requestGetUserList = MutableLiveData<NetworkResult<List<User>>>()
 
@@ -22,14 +22,6 @@ class UserViewModel : ViewModel() {
     private val _requestGetDetailUser = MutableLiveData<NetworkResult<User>>()
 
     val requestGetDetailUser: LiveData<NetworkResult<User>> = _requestGetDetailUser
-
-    private val _requestGetFollowingList = MutableLiveData<NetworkResult<List<User>>>()
-
-    val requestGetFollowingList: LiveData<NetworkResult<List<User>>> = _requestGetFollowingList
-
-    private val _requestGetFollowerList = MutableLiveData<NetworkResult<List<User>>>()
-
-    val requestGetFollowerList: LiveData<NetworkResult<List<User>>> = _requestGetFollowerList
 
     private val _querySearch = MutableLiveData<String?>()
 
@@ -45,14 +37,6 @@ class UserViewModel : ViewModel() {
 
     fun doneNavigatingToDetailFragment() {
         _requestGetDetailUser.value = NetworkResult.Loading()
-    }
-
-    fun doneLoadingFollowingList() {
-        _requestGetFollowingList.value = NetworkResult.Loading()
-    }
-
-    fun doneLoadingFollowerList() {
-        _requestGetFollowerList.value = NetworkResult.Loading()
     }
 
     fun getFilteredUserList(key: String) {
@@ -81,35 +65,6 @@ class UserViewModel : ViewModel() {
                 _requestGetDetailUser.value = NetworkResult.Loaded(detailUser)
             } catch (e: Exception) {
                 _requestGetDetailUser.value = NetworkResult.Error(User(), e.message)
-            }
-        }
-    }
-
-    fun getFollowingList(username: String) {
-        _requestGetFollowingList.value = NetworkResult.Loading()
-
-        viewModelScope.launch {
-            try {
-                val followingList = userRepository.getFollowingList(username)
-
-                _requestGetFollowingList.value = NetworkResult.Loaded(followingList)
-
-            } catch (e: Exception) {
-                _requestGetFollowingList.value = NetworkResult.Error(arrayListOf(), e.message)
-            }
-        }
-    }
-
-    fun getFollowerList(username: String) {
-        _requestGetFollowerList.value = NetworkResult.Loading()
-
-        viewModelScope.launch {
-            try {
-                val followerList = userRepository.getFollowerList(username)
-
-                _requestGetFollowerList.value = NetworkResult.Loaded(followerList)
-            } catch (e: Exception) {
-                _requestGetFollowerList.value = NetworkResult.Error(arrayListOf(), e.message)
             }
         }
     }
