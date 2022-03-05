@@ -40,7 +40,7 @@ class FollowerListFragment : Fragment(), IOnItemClickListener<User> {
     }
 
     private fun setupFollowerList() {
-        val userListAdapter = UserListAdapter()
+        val userListAdapter = UserListAdapter(isTouchableCard = false)
 
         userListAdapter.onItemClickListener = this
 

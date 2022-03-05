@@ -135,7 +135,7 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun setupUserList() {
-        val userListAdapter = UserListAdapter()
+        val userListAdapter = UserListAdapter(isTouchableCard = true)
 
         binding.swipeRefresh.setOnRefreshListener(this)
 

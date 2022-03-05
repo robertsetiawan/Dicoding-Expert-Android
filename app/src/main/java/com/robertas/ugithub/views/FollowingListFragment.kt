@@ -39,7 +39,7 @@ class FollowingListFragment : Fragment(), IOnItemClickListener<User> {
     }
 
     private fun setupFollowingList() {
-        val userListAdapter = UserListAdapter()
+        val userListAdapter = UserListAdapter(isTouchableCard = false)
 
         userListAdapter.onItemClickListener = this
 

@@ -12,7 +12,7 @@ import com.robertas.ugithub.databinding.UserItemBinding
 import com.robertas.ugithub.interfaces.IOnItemClickListener
 import com.robertas.ugithub.models.domain.User
 
-class UserListAdapter : ListAdapter<User, UserListAdapter.ViewHolder>(DiffCallBack) {
+class UserListAdapter(private val isTouchableCard: Boolean) : ListAdapter<User, UserListAdapter.ViewHolder>(DiffCallBack) {
 
     lateinit var onItemClickListener: IOnItemClickListener<User>
 
@@ -37,7 +37,15 @@ class UserListAdapter : ListAdapter<User, UserListAdapter.ViewHolder>(DiffCallBa
 
                 this.userTitleTv.text = user.login
 
-                this.userCard.setOnClickListener { onItemClickListener.onClick(user) }
+                this.userCard.apply {
+                    setOnClickListener { onItemClickListener.onClick(user) }
+
+                    isCheckable = isTouchableCard
+
+                    isClickable = isTouchableCard
+
+                    isFocusable = isTouchableCard
+                }
             }
         }
     }
