@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.robertas.ugithub.interfaces.IRepository
-import com.robertas.ugithub.mappers.UserMapper
+import com.robertas.ugithub.utils.mappers.UserMapper
 import com.robertas.ugithub.models.domain.User
 import com.robertas.ugithub.models.network.enums.NetworkResult
 import com.robertas.ugithub.repositories.UserRepository
@@ -15,9 +15,9 @@ import kotlinx.coroutines.launch
 class UserViewModel : ViewModel() {
     private var userRepository: IRepository<User> = UserRepository(Network.apiService, UserMapper())
 
-    private val _requstGetUserList = MutableLiveData<NetworkResult<List<User>>>()
+    private val _requestGetUserList = MutableLiveData<NetworkResult<List<User>>>()
 
-    val requestGetUserList: LiveData<NetworkResult<List<User>>> = _requstGetUserList
+    val requestGetUserList: LiveData<NetworkResult<List<User>>> = _requestGetUserList
 
     private val _requestGetDetailUser = MutableLiveData<NetworkResult<User>>()
 
@@ -25,30 +25,48 @@ class UserViewModel : ViewModel() {
 
     private val _requestGetFollowingList = MutableLiveData<NetworkResult<List<User>>>()
 
+    val requestGetFollowingList: LiveData<NetworkResult<List<User>>> = _requestGetFollowingList
+
     private val _requestGetFollowerList = MutableLiveData<NetworkResult<List<User>>>()
+
+    val requestGetFollowerList: LiveData<NetworkResult<List<User>>> = _requestGetFollowerList
 
     private val _querySearch = MutableLiveData<String?>()
 
     val querySearch: LiveData<String?> = _querySearch
 
-    fun setQuerySearch(newQuery: String?){ _querySearch.value = newQuery }
+    fun setQuerySearch(newQuery: String?) {
+        _querySearch.value = newQuery
+    }
 
-    fun doneNavigatingToDetailFragment(){
+    fun doneSearching() {
+        setQuerySearch(null)
+    }
+
+    fun doneNavigatingToDetailFragment() {
         _requestGetDetailUser.value = NetworkResult.Loading()
     }
 
+    fun doneLoadingFollowingList() {
+        _requestGetFollowingList.value = NetworkResult.Loading()
+    }
+
+    fun doneLoadingFollowerList() {
+        _requestGetFollowerList.value = NetworkResult.Loading()
+    }
+
     fun getFilteredUserList(key: String) {
-        _requstGetUserList.value = NetworkResult.Loading()
+        _requestGetUserList.value = NetworkResult.Loading()
 
         viewModelScope.launch {
 
             try {
                 val items = userRepository.getFilteredUser(key)
 
-                _requstGetUserList.value = NetworkResult.Loaded(items)
+                _requestGetUserList.value = NetworkResult.Loaded(items)
 
             } catch (e: Exception) {
-                _requstGetUserList.value = NetworkResult.Error(arrayListOf(), e.message)
+                _requestGetUserList.value = NetworkResult.Error(arrayListOf(), e.message)
             }
         }
     }

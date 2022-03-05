@@ -62,10 +62,15 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 is NetworkResult.Loading -> {}
 
                 is NetworkResult.Loaded -> {
-                    val directionsToDetailUser =
-                        UserListFragmentDirections.actionUserListFragmentToUserDetailFragment()
 
-                    navController.navigate(directionsToDetailUser)
+                    result.data?.let {
+                        val directionsToDetailUser =
+                            UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(it)
+
+                        navController.navigate(directionsToDetailUser)
+                    }
+
+                    binding.progressCircular.visibility = View.GONE
 
                     userViewModel.doneNavigatingToDetailFragment()
                 }
@@ -74,6 +79,8 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     result.message?.let {
                         Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
                     }
+
+                    binding.progressCircular.visibility = View.GONE
 
                     userViewModel.doneNavigatingToDetailFragment()
                 }
@@ -104,9 +111,14 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             override fun onQueryTextChange(newQuery: String?): Boolean {
                 newQuery?.let {
-                    if (it.isEmpty() || it.isBlank()) userViewModel.setQuerySearch(it)
-                }
+                    if (it.isBlank() || it.isEmpty()) {
+                        userViewModel.doneSearching()
 
+                        userViewModel.getFilteredUserList(
+                            UserViewModel.DEFAULT_KEYWORD
+                        )
+                    }
+                }
                 return true
             }
         })
@@ -115,10 +127,6 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             query?.let {
                 if (it.isNotBlank() && it.isNotEmpty()) {
                     userViewModel.getFilteredUserList(it)
-                } else {
-                    userViewModel.getFilteredUserList(
-                        UserViewModel.DEFAULT_KEYWORD
-                    )
                 }
             }
         }
@@ -135,6 +143,8 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             override fun onClick(obj: User) {
                 userViewModel.getDetailUser(username = obj.login)
+
+                binding.progressCircular.visibility = View.VISIBLE
             }
 
         }

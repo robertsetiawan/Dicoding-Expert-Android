@@ -1,7 +1,9 @@
 package com.robertas.ugithub.models.network
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class UserNetwork(
 
 	@Json(name="gists_url")

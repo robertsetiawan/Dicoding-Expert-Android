@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">User Github</string>
-    <string name="follower_placeholder">%1$s followers</string>
-    <string name="following_placeholder">%1$s following</string>
+    <string name="connection_placeholder">%1$s followers %2$s following</string>
     <string name="github_placeholder">github.com/%1$s</string>
+    <string name="follower">Follower</string>
+    <string name="following">Following</string>
     <string name="company">Company</string>
     <string name="location">Location</string>
     <string name="repository">Total repository</string>

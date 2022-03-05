@@ -18,5 +18,9 @@
         android:id="@+id/userDetailFragment"
         android:name="com.robertas.ugithub.views.UserDetailFragment"
         android:label="fragment_user_detail"
-        tools:layout="@layout/fragment_user_detail" />
+        tools:layout="@layout/fragment_user_detail" >
+        <argument
+            android:name="user"
+            app:argType="com.robertas.ugithub.models.domain.User" />
+    </fragment>
 </navigation>
