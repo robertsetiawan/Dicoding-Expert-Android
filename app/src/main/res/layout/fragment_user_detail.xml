@@ -37,9 +37,7 @@
 
                 <TextView
                     android:id="@+id/name_tv"
-                    style="@style/CustomTextSubtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/CustomTextTitle"
                     android:layout_marginStart="16dp"
                     app:layout_constraintBottom_toTopOf="@id/username_tv"
                     app:layout_constraintStart_toEndOf="@id/profile_image"
@@ -48,7 +46,7 @@
 
                 <TextView
                     android:id="@+id/username_tv"
-                    style="@style/CustomNormalText"
+                    style="@style/CustomTextSubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"

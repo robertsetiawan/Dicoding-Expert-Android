@@ -33,9 +33,7 @@
 
         <TextView
             android:id="@+id/user_title_tv"
-            style="@style/TextAppearance.Material3.TitleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/CustomNormalText"
             android:layout_marginStart="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/profile_image"

@@ -13,16 +13,23 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorOnPrimary</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="CustomTextTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+    </style>
+
     <style name="CustomTextSubtitle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
 
     </style>
     <style name="CustomNormalText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
     </style>
 
     <style name="CustomNormalText.Small">
