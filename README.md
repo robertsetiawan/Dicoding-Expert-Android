@@ -1,1 +1,1 @@
-# Submission 2 Dicoding Android Fundamental
+# Submission Dicoding Android Fundamental
