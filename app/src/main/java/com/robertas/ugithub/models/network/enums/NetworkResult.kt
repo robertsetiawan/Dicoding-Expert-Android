@@ -9,6 +9,4 @@ sealed class NetworkResult<T>(
     class Error<T>(data: T?, message: String?) : NetworkResult<T>(data, message)
 
     class Loading<T> : NetworkResult<T>()
-
-//    class Initial<T>: NetworkResult<T>()
 }

@@ -1,5 +1,6 @@
 package com.robertas.ugithub.services
 
+import com.robertas.ugithub.BuildConfig
 import com.robertas.ugithub.interfaces.IUserGithubService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -10,8 +11,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 
 object Network {
-    private const val API_KEY = "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"
-
     private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
         .build()
@@ -19,7 +18,7 @@ object Network {
     private val client = OkHttpClient.Builder()
         .addInterceptor { chain ->
             val request: Request =
-                chain.request().newBuilder().addHeader("Authorization", "token $API_KEY").build()
+                chain.request().newBuilder().addHeader("Authorization", "token ${BuildConfig.API_KEY}").build()
             chain.proceed(request)
         }
 

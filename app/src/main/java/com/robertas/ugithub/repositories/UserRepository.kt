@@ -25,8 +25,8 @@ class UserRepository(
         }
 
         when (response.code()) {
-            200 -> return response.body()?.map { element -> userMapper.maptoEntity(element) }
-                ?.toList() ?: arrayListOf()
+            200 -> return response.body()?.map { element -> userMapper.maptoEntity(element) }.orEmpty()
+                .toList()
 
             else -> throw Exception(getMessageFromApi(response))
         }
@@ -40,8 +40,8 @@ class UserRepository(
         }
 
         when (response.code()) {
-            200 -> return response.body()?.map { element -> userMapper.maptoEntity(element) }
-                ?.toList() ?: arrayListOf()
+            200 -> return response.body()?.map { element -> userMapper.maptoEntity(element) }.orEmpty()
+                .toList()
 
             else -> throw Exception(getMessageFromApi(response))
         }
@@ -69,8 +69,8 @@ class UserRepository(
         }
 
         when (response.code()) {
-            200 -> return response.body()?.items?.map { element -> userMapper.maptoEntity(element) }
-                ?.toList() ?: arrayListOf()
+            200 -> return response.body()?.items?.map { element -> userMapper.maptoEntity(element) }.orEmpty()
+                .toList()
 
             else -> throw Exception(getMessageFromApi(response))
         }
