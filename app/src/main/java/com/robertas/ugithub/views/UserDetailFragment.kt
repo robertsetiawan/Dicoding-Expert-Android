@@ -20,7 +20,9 @@ import com.robertas.ugithub.utils.extension.setTextOrHide
 
 
 class UserDetailFragment : Fragment(), View.OnClickListener {
-    private lateinit var binding: FragmentUserDetailBinding
+    private var _binding: FragmentUserDetailBinding? = null
+
+    private val binding get() = _binding!!
 
     private lateinit var navController: NavController
 
@@ -30,8 +32,7 @@ class UserDetailFragment : Fragment(), View.OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-        binding = FragmentUserDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentUserDetailBinding.inflate(inflater, container, false)
 
         navController = findNavController()
 
@@ -104,6 +105,12 @@ class UserDetailFragment : Fragment(), View.OnClickListener {
                 }
             }.attach()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 
     override fun onClick(view: View?) {

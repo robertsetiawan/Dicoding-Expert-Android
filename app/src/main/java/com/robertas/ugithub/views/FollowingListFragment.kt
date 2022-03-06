@@ -19,7 +19,9 @@ private const val ARG_PARAM = "username"
 
 class FollowingListFragment : Fragment(), IOnItemClickListener<User> {
 
-    private lateinit var binding: FragmentFollowingListBinding
+    private var _binding: FragmentFollowingListBinding? = null
+
+    private val binding get() = _binding!!
 
     private val followingViewModel by viewModels<FollowingListViewModel>()
 
@@ -36,8 +38,7 @@ class FollowingListFragment : Fragment(), IOnItemClickListener<User> {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-        binding = FragmentFollowingListBinding.inflate(inflater, container, false)
+        _binding = FragmentFollowingListBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -92,6 +93,12 @@ class FollowingListFragment : Fragment(), IOnItemClickListener<User> {
             viewLifecycleOwner,
             followingListObserver
         )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 
     override fun onClick(obj: User) {}

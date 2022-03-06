@@ -25,7 +25,9 @@ import com.robertas.ugithub.viewmodels.UserViewModel
 
 class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
-    private lateinit var binding: FragmentUserListBinding
+    private var _binding: FragmentUserListBinding? = null
+
+    private val binding get() = _binding!!
 
     private lateinit var navController: NavController
 
@@ -36,7 +38,7 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentUserListBinding.inflate(inflater, container, false)
+        _binding = FragmentUserListBinding.inflate(inflater, container, false)
 
         navController = findNavController()
 
@@ -196,5 +198,7 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         super.onDestroyView()
 
         hideKeyBoard()
+
+        _binding = null
     }
 }
