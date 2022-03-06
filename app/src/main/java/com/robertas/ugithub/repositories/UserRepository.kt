@@ -1,48 +1,84 @@
 package com.robertas.ugithub.repositories
 
-import android.annotation.SuppressLint
-import android.content.Context
+import com.robertas.ugithub.interfaces.IEntityMapper
 import com.robertas.ugithub.interfaces.IRepository
-import com.robertas.ugithub.R
-import com.robertas.ugithub.models.User
+import com.robertas.ugithub.interfaces.IUserGithubService
+import com.robertas.ugithub.models.domain.User
+import com.robertas.ugithub.models.network.SearchResponse
+import com.robertas.ugithub.models.network.UserNetwork
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import retrofit2.Response
 
-class UserRepository: IRepository<User> {
-    @SuppressLint("Recycle")
-    override fun getListItemFromResources(context: Context): List<User> {
-        val listUser: ArrayList<User> = arrayListOf()
+class UserRepository(
+    private val apiService: IUserGithubService,
 
-        with(context.resources){
-            val names = getStringArray(R.array.name)
+    private val userMapper: IEntityMapper<User, UserNetwork>
+) : IRepository<User> {
 
-            val usernames = getStringArray(R.array.username)
+    override suspend fun getFollowerList(user: String): List<User> {
+        val response: Response<List<UserNetwork>>
 
-            val companies = getStringArray(R.array.company)
-
-            val followers = getStringArray(R.array.followers)
-
-            val following = getStringArray(R.array.following)
-
-            val repositories = getStringArray(R.array.repository)
-
-            val avatars = obtainTypedArray(R.array.avatar)
-
-            val locations = getStringArray(R.array.location)
-
-            for (i in 0..9){
-                val user = User(
-                    username = usernames[i],
-                    name = names[i],
-                    company = companies[i],
-                    repository = repositories[i].toInt(),
-                    location = locations[i],
-                    followers = followers[i].toInt(),
-                    following = following[i].toInt(),
-                    avatar = avatars.getResourceId(i, -1)
-                )
-
-                listUser.add(user)
-            }
+        withContext(Dispatchers.IO) {
+            response = apiService.getFollowerListAsync(user)
         }
-        return listUser
+
+        when (response.code()) {
+            200 -> return response.body()?.map { element -> userMapper.maptoEntity(element) }.orEmpty()
+                .toList()
+
+            else -> throw Exception(getMessageFromApi(response))
+        }
+    }
+
+    override suspend fun getFollowingList(user: String): List<User> {
+        val response: Response<List<UserNetwork>>
+
+        withContext(Dispatchers.IO) {
+            response = apiService.getFollowingListAsync(user)
+        }
+
+        when (response.code()) {
+            200 -> return response.body()?.map { element -> userMapper.maptoEntity(element) }.orEmpty()
+                .toList()
+
+            else -> throw Exception(getMessageFromApi(response))
+        }
+    }
+
+    override suspend fun getDetailUser(user: String): User {
+        val response: Response<UserNetwork>
+
+        withContext(Dispatchers.IO) {
+            response = apiService.getDetailUserAsync(user)
+        }
+
+        when (response.code()) {
+            200 -> return response.body()?.let { userMapper.maptoEntity(it) } ?: User()
+
+            else -> throw Exception(getMessageFromApi(response))
+        }
+    }
+
+    override suspend fun getFilteredUser(key: String): List<User> {
+        val response: Response<SearchResponse>
+
+        withContext(Dispatchers.IO) {
+            response = apiService.getFilteredUserAsync(key)
+        }
+
+        when (response.code()) {
+            200 -> return response.body()?.items?.map { element -> userMapper.maptoEntity(element) }.orEmpty()
+                .toList()
+
+            else -> throw Exception(getMessageFromApi(response))
+        }
+    }
+
+    private fun getMessageFromApi(response: Response<*>): String {
+        val jsonObj = JSONObject(response.errorBody()!!.charStream().readText())
+
+        return jsonObj.getString("message")
     }
 }

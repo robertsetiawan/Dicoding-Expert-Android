@@ -2,9 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="primary_black">#424242</color>
-    <color name="primary_light">#6d6d6d</color>
-    <color name="primary_dark">#1b1b1b</color>
-    <color name="secondary_black">#bdbdbd</color>
-    <color name="secondary_light">#efefef</color>
+    <color name="dark_blue_200">#161B22</color>
+    <color name="dark_blue_500">#0D1013</color>
+    <color name="zeus">#221d16</color>
+    <color name="iron_200">#e8e8e9</color>
+    <color name="iron_500">#bababa</color>
+    <color name="desert_storm_200">#e9e9e8</color>
+    <color name="desert_storm_500">#DCDCDB</color>
 </resources>
