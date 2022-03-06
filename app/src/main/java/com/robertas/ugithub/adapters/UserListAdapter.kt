@@ -11,7 +11,8 @@ import com.robertas.ugithub.databinding.UserItemBinding
 import com.robertas.ugithub.interfaces.IOnItemClickListener
 import com.robertas.ugithub.models.domain.User
 
-class UserListAdapter(private val isTouchableCard: Boolean) : ListAdapter<User, UserListAdapter.ViewHolder>(DiffCallBack) {
+class UserListAdapter(private val isTouchableCard: Boolean) :
+    ListAdapter<User, UserListAdapter.ViewHolder>(DiffCallBack) {
 
     lateinit var onItemClickListener: IOnItemClickListener<User>
 

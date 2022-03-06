@@ -12,7 +12,7 @@ import com.robertas.ugithub.services.Network
 import com.robertas.ugithub.utils.mappers.UserMapper
 import kotlinx.coroutines.launch
 
-class FollowingListViewModel: ViewModel() {
+class FollowingListViewModel : ViewModel() {
     private val userRepository: IRepository<User> = UserRepository(Network.apiService, UserMapper())
 
     private val _requestGetFollowingList = MutableLiveData<NetworkResult<List<User>>>()

@@ -13,4 +13,4 @@ data class SearchResponse(
 
     @Json(name = "items")
     override val items: List<UserNetwork>
-): ResponseContainer<UserNetwork>()
+) : ResponseContainer<UserNetwork>()

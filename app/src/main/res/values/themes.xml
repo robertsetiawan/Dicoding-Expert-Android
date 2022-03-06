@@ -32,7 +32,4 @@
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
     </style>
 
-    <style name="CustomNormalText.Small">
-        <item name="android:textAppearance">@style/TextAppearance.Material3.BodySmall</item>
-    </style>
 </resources>

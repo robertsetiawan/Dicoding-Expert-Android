@@ -1,9 +1,11 @@
 package com.robertas.ugithub.views
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -180,7 +182,19 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         binding.userList.visibility = View.VISIBLE
     }
 
+    private fun hideKeyBoard() {
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        imm.hideSoftInputFromWindow(view?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+    }
+
     override fun onRefresh() {
         userViewModel.getFilteredUserList(UserViewModel.DEFAULT_KEYWORD)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        hideKeyBoard()
     }
 }

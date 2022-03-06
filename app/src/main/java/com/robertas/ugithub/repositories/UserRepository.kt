@@ -76,7 +76,7 @@ class UserRepository(
         }
     }
 
-    private fun getMessageFromApi(response: Response<*>): String{
+    private fun getMessageFromApi(response: Response<*>): String {
         val jsonObj = JSONObject(response.errorBody()!!.charStream().readText())
 
         return jsonObj.getString("message")
