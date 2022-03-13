@@ -1,4 +1,4 @@
-package com.robertas.ugithub.interfaces
+package com.robertas.ugithub.abstractions
 
 
 interface IOnItemClickListener<T> {

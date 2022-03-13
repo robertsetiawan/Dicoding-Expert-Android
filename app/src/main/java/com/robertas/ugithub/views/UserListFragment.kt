@@ -18,11 +18,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.robertas.ugithub.R
 import com.robertas.ugithub.adapters.UserListAdapter
 import com.robertas.ugithub.databinding.FragmentUserListBinding
-import com.robertas.ugithub.interfaces.IOnItemClickListener
-import com.robertas.ugithub.models.domain.User
+import com.robertas.ugithub.abstractions.IOnItemClickListener
+import com.robertas.ugithub.models.domain.UserDomain
 import com.robertas.ugithub.models.network.enums.NetworkResult
+import com.robertas.ugithub.viewmodels.UserDetailViewModel
 import com.robertas.ugithub.viewmodels.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var _binding: FragmentUserListBinding? = null
@@ -32,6 +35,8 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var navController: NavController
 
     private val userViewModel by viewModels<UserViewModel>()
+
+    private val userDetailViewModel by viewModels<UserDetailViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +65,7 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         binding.toolbarFragment.setNavigationOnClickListener { navController.navigateUp() }
 
-        val navigationObserver: Observer<NetworkResult<User>> = Observer { result ->
+        val navigationObserver: Observer<NetworkResult<UserDomain>> = Observer { result ->
             when (result) {
 
                 is NetworkResult.Loading -> {}
@@ -76,7 +81,7 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                     binding.progressCircular.visibility = View.GONE
 
-                    userViewModel.doneNavigatingToDetailFragment()
+                    userDetailViewModel.doneNavigatingToDetailFragment()
                 }
 
                 is NetworkResult.Error -> {
@@ -86,24 +91,51 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                     binding.progressCircular.visibility = View.GONE
 
-                    userViewModel.doneNavigatingToDetailFragment()
+                    userDetailViewModel.doneNavigatingToDetailFragment()
                 }
             }
 
         }
 
-        userViewModel.requestGetDetailUser.observe(viewLifecycleOwner, navigationObserver)
+        userDetailViewModel.requestGetDetailUser.observe(viewLifecycleOwner, navigationObserver)
     }
 
     private fun setupToolbarSearch() {
 
-        binding.toolbarFragment.inflateMenu(R.menu.search_menu)
+        binding.toolbarFragment.apply {
+            inflateMenu(R.menu.home_menu)
+
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+
+                    R.id.setting -> {
+                        val settingsDirection =
+                            UserListFragmentDirections.actionUserListFragmentToSettingsFragment()
+
+                        navController.navigate(settingsDirection)
+
+                        true
+                    }
+
+                    R.id.favorite -> {
+                        val favouriteListDirection =
+                            UserListFragmentDirections.actionUserListFragmentToFavouriteListFragment()
+
+                        navController.navigate(favouriteListDirection)
+
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+        }
 
         val search = binding.toolbarFragment.menu.findItem(R.id.appSearchBar)
 
         val searchView = search.actionView as SearchView
 
-        searchView.queryHint = "Github Username"
+        searchView.queryHint = getString(R.string.github_username)
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(newQuery: String?): Boolean {
@@ -143,24 +175,32 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         binding.swipeRefresh.setOnRefreshListener(this)
 
-        userListAdapter.onItemClickListener = object : IOnItemClickListener<User> {
+        userListAdapter.onItemClickListener = object : IOnItemClickListener<UserDomain> {
 
-            override fun onClick(obj: User) {
-                userViewModel.getDetailUser(username = obj.login)
+            override fun onClick(obj: UserDomain) {
+                userDetailViewModel.getDetailUser(username = obj.login)
 
                 binding.progressCircular.visibility = View.VISIBLE
             }
 
         }
 
-        val listUserObserver: Observer<NetworkResult<List<User>>> = Observer { result ->
+        val listUserObserver: Observer<NetworkResult<List<UserDomain>>> = Observer { result ->
             when (result) {
-                is NetworkResult.Loading -> switchRefreshAndList(false)
+                is NetworkResult.Loading -> binding.swipeRefresh.isRefreshing = true
 
                 is NetworkResult.Loaded -> {
-                    result.data?.let { userListAdapter.submitList(it) }
+                    result.data?.let {
+                        if (it.isEmpty()) {
 
-                    switchRefreshAndList(true)
+                            switchRefreshAndList(isRefreshing = true, isEmptyList = true)
+
+                        } else {
+                            switchRefreshAndList(isRefreshing = true, isEmptyList = false)
+
+                            userListAdapter.submitList(it)
+                        }
+                    }
                 }
 
                 is NetworkResult.Error -> {
@@ -168,7 +208,7 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
                     }
 
-                    switchRefreshAndList(true)
+                    binding.swipeRefresh.isRefreshing = false
                 }
             }
         }
@@ -178,10 +218,28 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         binding.userList.adapter = userListAdapter
     }
 
-    private fun switchRefreshAndList(isRefreshing: Boolean) {
-        binding.swipeRefresh.isRefreshing = !isRefreshing
+    private fun switchRefreshAndList(isRefreshing: Boolean, isEmptyList: Boolean) {
 
-        binding.userList.visibility = View.VISIBLE
+        if (isEmptyList) {
+
+            binding.apply {
+                swipeRefresh.isRefreshing = !isRefreshing
+
+                userList.visibility = View.GONE
+
+                emptyLayout.visibility = View.VISIBLE
+            }
+
+        } else {
+
+            binding.apply {
+                swipeRefresh.isRefreshing = !isRefreshing
+
+                userList.visibility = View.VISIBLE
+
+                emptyLayout.visibility = View.GONE
+            }
+        }
     }
 
     private fun hideKeyBoard() {

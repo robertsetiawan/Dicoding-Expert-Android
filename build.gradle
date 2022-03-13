@@ -4,14 +4,7 @@ buildscript {
         google()
         mavenCentral()
     }
-    dependencies {
-        classpath "com.android.tools.build:gradle:7.0.4"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.4.1"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
+    
     ext {
         retrofit_version = "2.9.0"
         moshi_version = "1.13.0"
@@ -19,6 +12,19 @@ buildscript {
         glide_version = '4.13.1'
         nav_version = "2.4.1"
         lifecycle_version = '2.4.1'
+        room_version = '2.4.2'
+        hilt_version = '2.41'
+        datastore_version = "1.0.0"
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
     }
 }
 

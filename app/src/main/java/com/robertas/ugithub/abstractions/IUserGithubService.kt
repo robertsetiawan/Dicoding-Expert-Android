@@ -1,4 +1,4 @@
-package com.robertas.ugithub.interfaces
+package com.robertas.ugithub.abstractions
 
 import com.robertas.ugithub.models.network.SearchResponse
 import com.robertas.ugithub.models.network.UserNetwork

@@ -11,28 +11,28 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
-class FollowingListViewModel @Inject constructor(
+class UserDetailViewModel @Inject constructor(
     private val userRepository: IRepository<UserDomain>
 ) : ViewModel() {
+    private val _requestGetDetailUser = MutableLiveData<NetworkResult<UserDomain>>()
 
-    private val _requestGetFollowingList = MutableLiveData<NetworkResult<List<UserDomain>>>()
+    val requestGetDetailUser: LiveData<NetworkResult<UserDomain>> = _requestGetDetailUser
 
-    val requestGetFollowingList: LiveData<NetworkResult<List<UserDomain>>> =
-        _requestGetFollowingList
+    fun doneNavigatingToDetailFragment() {
+        _requestGetDetailUser.value = NetworkResult.Loading()
+    }
 
-    fun getFollowingList(username: String) {
-        _requestGetFollowingList.value = NetworkResult.Loading()
+    fun getDetailUser(username: String) {
+        _requestGetDetailUser.value = NetworkResult.Loading()
 
         viewModelScope.launch {
             try {
-                val followingList = userRepository.getFollowingList(username)
+                val detailUser = userRepository.getDetailUser(username)
 
-                _requestGetFollowingList.value = NetworkResult.Loaded(followingList)
-
+                _requestGetDetailUser.value = NetworkResult.Loaded(detailUser)
             } catch (e: Exception) {
-                _requestGetFollowingList.value = NetworkResult.Error(arrayListOf(), e.message)
+                _requestGetDetailUser.value = NetworkResult.Error(UserDomain(), e.message)
             }
         }
     }

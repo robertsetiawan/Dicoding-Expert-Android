@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class User(
+data class UserDomain(
     val login: String = "",
     val bio: String = "",
     val company: String = "",

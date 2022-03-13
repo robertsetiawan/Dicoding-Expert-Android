@@ -1,13 +1,14 @@
 package com.robertas.ugithub.utils.mappers
 
-import com.robertas.ugithub.interfaces.IEntityMapper
-import com.robertas.ugithub.models.domain.User
+import com.robertas.ugithub.abstractions.IEntityMapper
+import com.robertas.ugithub.models.domain.UserDomain
 import com.robertas.ugithub.models.network.UserNetwork
+import javax.inject.Inject
 
-class UserMapper : IEntityMapper<User, UserNetwork> {
+class UserDomainMapper @Inject constructor() : IEntityMapper<UserDomain, UserNetwork> {
 
-    override fun maptoEntity(target: UserNetwork): User {
-        return User(
+    override fun maptoEntity(target: UserNetwork): UserDomain {
+        return UserDomain(
             login = target.login ?: "",
             bio = target.bio ?: "",
             company = target.company ?: "",
@@ -21,4 +22,6 @@ class UserMapper : IEntityMapper<User, UserNetwork> {
             location = target.location ?: ""
         )
     }
+
+    override fun mapFromEntity(source: UserDomain): UserNetwork = UserNetwork()
 }

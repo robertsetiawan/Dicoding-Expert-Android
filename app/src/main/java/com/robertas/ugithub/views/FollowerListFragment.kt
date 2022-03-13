@@ -10,17 +10,19 @@ import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.robertas.ugithub.adapters.UserListAdapter
 import com.robertas.ugithub.databinding.FragmentFollowerListBinding
-import com.robertas.ugithub.interfaces.IOnItemClickListener
-import com.robertas.ugithub.models.domain.User
+import com.robertas.ugithub.abstractions.IOnItemClickListener
+import com.robertas.ugithub.models.domain.UserDomain
 import com.robertas.ugithub.models.network.enums.NetworkResult
 import com.robertas.ugithub.viewmodels.FollowerListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
 private const val ARG_PARAM = "username"
 
-class FollowerListFragment : Fragment(), IOnItemClickListener<User> {
+@AndroidEntryPoint
+class FollowerListFragment : Fragment(), IOnItemClickListener<UserDomain> {
 
-    private var _binding: FragmentFollowerListBinding ?= null
+    private var _binding: FragmentFollowerListBinding? = null
 
     private val binding get() = _binding!!
 
@@ -53,7 +55,7 @@ class FollowerListFragment : Fragment(), IOnItemClickListener<User> {
     }
 
     private fun loadFollowerList() {
-        username?.also { followerViewModel.getFollowerList(it) }
+        username?.let { followerViewModel.getFollowerList(it) }
     }
 
     private fun setupFollowerList() {
@@ -63,7 +65,7 @@ class FollowerListFragment : Fragment(), IOnItemClickListener<User> {
 
         binding.userList.adapter = userListAdapter
 
-        val followerListObserver: Observer<NetworkResult<List<User>>> = Observer { result ->
+        val followerListObserver: Observer<NetworkResult<List<UserDomain>>> = Observer { result ->
             when (result) {
                 is NetworkResult.Loading -> {
                     binding.progressCircular.visibility = View.VISIBLE
@@ -99,7 +101,7 @@ class FollowerListFragment : Fragment(), IOnItemClickListener<User> {
         _binding = null
     }
 
-    override fun onClick(obj: User) {}
+    override fun onClick(obj: UserDomain) {}
 
     companion object {
         @JvmStatic

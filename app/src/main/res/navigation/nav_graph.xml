@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_userListFragment_to_userDetailFragment"
             app:destination="@id/userDetailFragment" />
+        <action
+            android:id="@+id/action_userListFragment_to_favouriteListFragment"
+            app:destination="@id/favouriteListFragment" />
+        <action
+            android:id="@+id/action_userListFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/userDetailFragment"
@@ -21,6 +27,20 @@
         tools:layout="@layout/fragment_user_detail" >
         <argument
             android:name="user"
-            app:argType="com.robertas.ugithub.models.domain.User" />
+            app:argType="com.robertas.ugithub.models.domain.UserDomain" />
     </fragment>
+    <fragment
+        android:id="@+id/favouriteListFragment"
+        android:name="com.robertas.ugithub.views.FavouriteListFragment"
+        android:label="@string/favourite_list"
+        tools:layout="@layout/fragment_favourite_list" >
+        <action
+            android:id="@+id/action_favouriteListFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.robertas.ugithub.views.SettingsFragment"
+        android:label="@string/setting"
+        tools:layout="@layout/fragment_settings" />
 </navigation>
