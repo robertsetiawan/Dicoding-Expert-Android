@@ -7,18 +7,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.robertas.ugithub.R
 import com.robertas.ugithub.adapters.UserTabAdapter
 import com.robertas.ugithub.databinding.FragmentUserDetailBinding
+import com.robertas.ugithub.models.domain.UserDomain
 import com.robertas.ugithub.utils.extension.setTextOrHide
+import com.robertas.ugithub.viewmodels.FavouriteListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class UserDetailFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentUserDetailBinding? = null
 
@@ -27,6 +34,8 @@ class UserDetailFragment : Fragment(), View.OnClickListener {
     private lateinit var navController: NavController
 
     private val navArgs by navArgs<UserDetailFragmentArgs>()
+
+    private val favouriteListViewModel by viewModels<FavouriteListViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,10 +93,65 @@ class UserDetailFragment : Fragment(), View.OnClickListener {
     private fun setupToolbarNavigation() {
 
         binding.toolbarFragment.apply {
+            inflateMenu(R.menu.detail_menu)
+
             setupWithNavController(navController)
 
             setNavigationOnClickListener {
                 navController.navigateUp()
+            }
+        }
+
+        val likeIcon = binding.toolbarFragment.menu.findItem(R.id.like)
+
+        val likedIcon = binding.toolbarFragment.menu.findItem(R.id.liked)
+
+        val favouriteUserObserver: Observer<UserDomain?> = Observer {
+            if (it != null) {
+                likeIcon.isVisible = false
+
+                likedIcon.isVisible = true
+
+            } else {
+
+                likeIcon.isVisible = true
+
+                likedIcon.isVisible = false
+            }
+        }
+
+        favouriteListViewModel.getFavouriteUser(navArgs.user.id)
+            .observe(viewLifecycleOwner, favouriteUserObserver)
+
+        binding.toolbarFragment.setOnMenuItemClickListener { item ->
+
+            when (item.itemId) {
+
+                R.id.like -> {
+
+                    favouriteListViewModel.addFavouriteUser(navArgs.user)
+
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.user_added_to_favourites),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+
+                    true
+                }
+
+                R.id.liked -> {
+                    favouriteListViewModel.deleteFavouriteUser(navArgs.user)
+
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.user_removed_from_favourites),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+
+                    true
+                }
+                else -> false
             }
         }
     }

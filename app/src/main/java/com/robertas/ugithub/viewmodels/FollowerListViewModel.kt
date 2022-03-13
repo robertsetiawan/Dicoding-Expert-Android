@@ -4,20 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.robertas.ugithub.interfaces.IRepository
-import com.robertas.ugithub.models.domain.User
+import com.robertas.ugithub.abstractions.IRepository
+import com.robertas.ugithub.models.domain.UserDomain
 import com.robertas.ugithub.models.network.enums.NetworkResult
-import com.robertas.ugithub.repositories.UserRepository
-import com.robertas.ugithub.services.Network
-import com.robertas.ugithub.utils.mappers.UserMapper
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FollowerListViewModel : ViewModel() {
-    private val userRepository: IRepository<User> = UserRepository(Network.apiService, UserMapper())
+@HiltViewModel
+class FollowerListViewModel @Inject constructor(
+    private val userRepository: IRepository<UserDomain>
+) : ViewModel() {
 
-    private val _requestGetFollowerList = MutableLiveData<NetworkResult<List<User>>>()
+    private val _requestGetFollowerList = MutableLiveData<NetworkResult<List<UserDomain>>>()
 
-    val requestGetFollowerList: LiveData<NetworkResult<List<User>>> = _requestGetFollowerList
+    val requestGetFollowerList: LiveData<NetworkResult<List<UserDomain>>> = _requestGetFollowerList
 
     fun getFollowerList(username: String) {
         _requestGetFollowerList.value = NetworkResult.Loading()

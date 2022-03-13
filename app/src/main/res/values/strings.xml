@@ -8,4 +8,18 @@
     <string name="detail_user">Detail User</string>
     <string name="search">Search</string>
     <string name="open_in_github">open in github</string>
+    <string name="favourite">Favourite</string>
+    <string name="setting">Settings</string>
+    <string name="no_data">No Data</string>
+    <string name="github_username">Github Username</string>
+    <string name="favourite_list">Favourite List</string>
+    <string name="user_removed_from_favourites">User has been removed from favourites</string>
+    <string name="user_added_to_favourites">User has been added to favourites</string>
+    <string name="favourites_cleared">Favourites are cleared</string>
+    <string name="user_interface">User Interface</string>
+    <string name="dark_theme">Dark Theme</string>
+    <string name="delete_all_favourites">Are You Sure to Delete All Favourites?</string>
+    <string name="delete_confirmation">Delete Confirmation</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
 </resources>

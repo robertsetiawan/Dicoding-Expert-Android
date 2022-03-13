@@ -4,24 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.robertas.ugithub.interfaces.IRepository
-import com.robertas.ugithub.utils.mappers.UserMapper
-import com.robertas.ugithub.models.domain.User
+import com.robertas.ugithub.abstractions.IRepository
+import com.robertas.ugithub.models.domain.UserDomain
 import com.robertas.ugithub.models.network.enums.NetworkResult
-import com.robertas.ugithub.repositories.UserRepository
-import com.robertas.ugithub.services.Network
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class UserViewModel : ViewModel() {
-    private val userRepository: IRepository<User> = UserRepository(Network.apiService, UserMapper())
+@HiltViewModel
+class UserViewModel @Inject constructor(
+    private val userRepository: IRepository<UserDomain>
+) : ViewModel() {
 
-    private val _requestGetUserList = MutableLiveData<NetworkResult<List<User>>>()
+    private val _requestGetUserList = MutableLiveData<NetworkResult<List<UserDomain>>>()
 
-    val requestGetUserList: LiveData<NetworkResult<List<User>>> = _requestGetUserList
-
-    private val _requestGetDetailUser = MutableLiveData<NetworkResult<User>>()
-
-    val requestGetDetailUser: LiveData<NetworkResult<User>> = _requestGetDetailUser
+    val requestGetUserList: LiveData<NetworkResult<List<UserDomain>>> = _requestGetUserList
 
     private val _querySearch = MutableLiveData<String?>()
 
@@ -33,10 +30,6 @@ class UserViewModel : ViewModel() {
 
     fun doneSearching() {
         setQuerySearch(null)
-    }
-
-    fun doneNavigatingToDetailFragment() {
-        _requestGetDetailUser.value = NetworkResult.Loading()
     }
 
     fun getFilteredUserList(key: String) {
@@ -51,20 +44,6 @@ class UserViewModel : ViewModel() {
 
             } catch (e: Exception) {
                 _requestGetUserList.value = NetworkResult.Error(arrayListOf(), e.message)
-            }
-        }
-    }
-
-    fun getDetailUser(username: String) {
-        _requestGetDetailUser.value = NetworkResult.Loading()
-
-        viewModelScope.launch {
-            try {
-                val detailUser = userRepository.getDetailUser(username)
-
-                _requestGetDetailUser.value = NetworkResult.Loaded(detailUser)
-            } catch (e: Exception) {
-                _requestGetDetailUser.value = NetworkResult.Error(User(), e.message)
             }
         }
     }
