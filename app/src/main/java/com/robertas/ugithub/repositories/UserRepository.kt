@@ -36,7 +36,7 @@ class UserRepository @Inject constructor(
         }
 
         when (response.code()) {
-            200 -> return response.body()?.map { element -> userDomainMapper.maptoEntity(element) }
+            200 -> return response.body()?.map { element -> userDomainMapper.mapToEntity(element) }
                 .orEmpty()
                 .toList()
 
@@ -52,7 +52,7 @@ class UserRepository @Inject constructor(
         }
 
         when (response.code()) {
-            200 -> return response.body()?.map { element -> userDomainMapper.maptoEntity(element) }
+            200 -> return response.body()?.map { element -> userDomainMapper.mapToEntity(element) }
                 .orEmpty()
                 .toList()
 
@@ -68,7 +68,7 @@ class UserRepository @Inject constructor(
         }
 
         when (response.code()) {
-            200 -> return response.body()?.let { userDomainMapper.maptoEntity(it) } ?: UserDomain()
+            200 -> return response.body()?.let { userDomainMapper.mapToEntity(it) } ?: UserDomain()
 
             else -> throw Exception(getMessageFromApi(response))
         }
@@ -83,7 +83,7 @@ class UserRepository @Inject constructor(
 
         when (response.code()) {
             200 -> return response.body()?.items?.map { element ->
-                userDomainMapper.maptoEntity(
+                userDomainMapper.mapToEntity(
                     element
                 )
             }.orEmpty()
@@ -94,7 +94,7 @@ class UserRepository @Inject constructor(
     }
 
     override suspend fun insertFavouriteUser(user: UserDomain) {
-        val userEntity = userEntityMapper.maptoEntity(user)
+        val userEntity = userEntityMapper.mapToEntity(user)
 
         withContext(Dispatchers.IO) { userDao.insert(userEntity) }
     }
@@ -105,7 +105,7 @@ class UserRepository @Inject constructor(
         }
 
     override suspend fun deleteFavouriteUser(user: UserDomain) {
-        val userEntity = userEntityMapper.maptoEntity(user)
+        val userEntity = userEntityMapper.mapToEntity(user)
 
         withContext(Dispatchers.IO) { userDao.delete(userEntity) }
     }

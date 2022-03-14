@@ -43,14 +43,14 @@ class UserDetailFragment : Fragment(), View.OnClickListener {
     ): View {
         _binding = FragmentUserDetailBinding.inflate(inflater, container, false)
 
-        navController = findNavController()
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
+
+        navController = findNavController()
 
         setupToolbarNavigation()
 

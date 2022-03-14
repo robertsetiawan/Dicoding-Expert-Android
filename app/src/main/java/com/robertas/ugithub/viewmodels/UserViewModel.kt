@@ -20,18 +20,6 @@ class UserViewModel @Inject constructor(
 
     val requestGetUserList: LiveData<NetworkResult<List<UserDomain>>> = _requestGetUserList
 
-    private val _querySearch = MutableLiveData<String?>()
-
-    val querySearch: LiveData<String?> = _querySearch
-
-    fun setQuerySearch(newQuery: String?) {
-        _querySearch.value = newQuery
-    }
-
-    fun doneSearching() {
-        setQuerySearch(null)
-    }
-
     fun getFilteredUserList(key: String) {
         _requestGetUserList.value = NetworkResult.Loading()
 

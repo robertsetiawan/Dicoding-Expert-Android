@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class UserDomainMapper @Inject constructor() : IEntityMapper<UserDomain, UserNetwork> {
 
-    override fun maptoEntity(target: UserNetwork): UserDomain {
+    override fun mapToEntity(target: UserNetwork): UserDomain {
         return UserDomain(
             login = target.login ?: "",
             bio = target.bio ?: "",

@@ -6,7 +6,7 @@ import com.robertas.ugithub.models.entity.User
 import javax.inject.Inject
 
 class UserEntityMapper @Inject constructor() : IEntityMapper<User, UserDomain> {
-    override fun maptoEntity(target: UserDomain): User {
+    override fun mapToEntity(target: UserDomain): User {
         return User(
             login = target.login,
             id = target.id,
