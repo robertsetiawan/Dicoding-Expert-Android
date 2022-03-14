@@ -45,13 +45,13 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         _binding = FragmentUserListBinding.inflate(inflater, container, false)
 
-        navController = findNavController()
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        navController = findNavController()
 
         setupNavigation()
 
