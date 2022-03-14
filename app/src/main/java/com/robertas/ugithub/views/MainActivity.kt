@@ -39,12 +39,4 @@ class MainActivity : AppCompatActivity() {
         }
         settingsViewModel.getThemeSettings().observe(this, themeObserver)
     }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        _binding = null
-    }
-
 }
