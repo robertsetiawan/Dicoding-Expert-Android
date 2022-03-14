@@ -140,34 +140,21 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(newQuery: String?): Boolean {
 
-                userViewModel.setQuerySearch(newQuery)
-
-                return true
-            }
-
-            override fun onQueryTextChange(newQuery: String?): Boolean {
                 newQuery?.let {
-                    if (it.isBlank() || it.isEmpty()) {
-                        userViewModel.doneSearching()
-
-                        userViewModel.getFilteredUserList(
-                            UserViewModel.DEFAULT_KEYWORD
-                        )
-                    }
-                }
-                return true
-            }
-        })
-
-        val searchObserver: Observer<String?> = Observer { query ->
-            query?.let {
-                if (it.isNotBlank() && it.isNotEmpty()) {
                     userViewModel.getFilteredUserList(it)
                 }
-            }
-        }
 
-        userViewModel.querySearch.observe(viewLifecycleOwner, searchObserver)
+                return true
+            }
+
+            override fun onQueryTextChange(newQuery: String?): Boolean = false
+        })
+
+        searchView.setOnCloseListener {
+            userViewModel.getFilteredUserList(UserViewModel.DEFAULT_KEYWORD)
+
+            false
+        }
     }
 
     private fun setupUserList() {
@@ -193,10 +180,10 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     result.data?.let {
                         if (it.isEmpty()) {
 
-                            switchRefreshAndList(isRefreshing = true, isEmptyList = true)
+                            switchRefreshAndList(isEmptyList = true)
 
                         } else {
-                            switchRefreshAndList(isRefreshing = true, isEmptyList = false)
+                            switchRefreshAndList(isEmptyList = false)
 
                             userListAdapter.submitList(it)
                         }
@@ -218,12 +205,12 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         binding.userList.adapter = userListAdapter
     }
 
-    private fun switchRefreshAndList(isRefreshing: Boolean, isEmptyList: Boolean) {
+    private fun switchRefreshAndList(isEmptyList: Boolean) {
 
         if (isEmptyList) {
 
             binding.apply {
-                swipeRefresh.isRefreshing = !isRefreshing
+                swipeRefresh.isRefreshing = false
 
                 userList.visibility = View.GONE
 
@@ -233,7 +220,7 @@ class UserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         } else {
 
             binding.apply {
-                swipeRefresh.isRefreshing = !isRefreshing
+                swipeRefresh.isRefreshing = false
 
                 userList.visibility = View.VISIBLE
 
