@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_data">No Data</string>
+    <string name="delete_all_favourites">Are You Sure to Delete All Favourites?</string>
+    <string name="delete_confirmation">Delete Confirmation</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="favourites_cleared">Favourites are cleared</string>
+</resources>

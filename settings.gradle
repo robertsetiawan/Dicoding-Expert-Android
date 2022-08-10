@@ -7,3 +7,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "User Github"
 include ':app'
+include ':core'
+include ':favorite'
